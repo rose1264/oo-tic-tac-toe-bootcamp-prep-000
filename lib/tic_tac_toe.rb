@@ -13,85 +13,85 @@ class TicTacToe
   def board
     @board = Array.new(9," ")
   end
-  
-  def play(board)
-    while !over?(board)
-      turn(board)
+
+  def play
+    while !over?
+      turn
     end
-    if won?(board)
-      puts "Congratulations #{winner(board)}!"
-    elsif draw?(board)
+    if won?
+      puts "Congratulations #{winner}!"
+    elsif draw?
       puts "Cat's Game!"
     end
   end
 
-  def display_board(board)
-    puts " #{board[0]} | #{board[1]} | #{board[2]} "
+  def display_board
+    puts " #{@board[0]} | #{@board[1]} | #{@board[2]} "
     puts "-----------"
-    puts " #{board[3]} | #{board[4]} | #{board[5]} "
+    puts " #{@board[3]} | #{@board[4]} | #{@board[5]} "
     puts "-----------"
-    puts " #{board[6]} | #{board[7]} | #{board[8]} "
+    puts " #{@board[6]} | #{@board[7]} | #{@board[8]} "
   end
 
-  def valid_move?(board, index)
-    index.between?(0,8) && !position_taken?(board, index)
+  def valid_move?(index)
+    index.between?(0,8) && !position_taken?(index)
   end
 
-  def won?(board)
+  def won?
     WIN_COMBINATIONS.detect do |combo|
       board[combo[0]] == board[combo[1]] &&
       board[combo[1]] == board[combo[2]] &&
-      position_taken?(board, combo[0])
+      position_taken?(combo[0])
     end
   end
 
-  def full?(board)
-    board.all?{|token| token == "X" || token == "O"}
+  def full?
+    @board.all?{|token| token == "X" || token == "O"}
   end
 
-  def draw?(board)
-    !won?(board) && full?(board)
+  def draw?
+    !won? && full?
   end
 
-  def over?(board)
-    won?(board) || draw?(board)
+  def over?
+    won? || draw?
   end
 
   def input_to_index(user_input)
     user_input.to_i - 1
   end
 
-  def turn(board)
+  def turn
     puts "Please enter 1-9:"
     user_input = gets.strip
     index = input_to_index(user_input)
-    if valid_move?(board, index)
-      move(board, index, current_player(board))
-      display_board(board)
+    if valid_move?(index)
+      move(index, current_player)
+      display_board
     else
-      turn(board)
+      turn
     end
   end
 
-  def position_taken?(board, index)
-    board[index]== "X" || board[index] == "O"
+  def position_taken?(index)
+    @board[index]== "X" || @board[index] == "O"
   end
 
-  def current_player(board)
-    turn_count(board) % 2 == 0 ? "X" : "O"
+  def current_player
+    turn_count % 2 == 0 ? "X" : "O"
   end
 
-  def turn_count(board)
-    board.count{|token| token == "X" || token == "O"}
+  def turn_count
+    @board.count{|token| token == "X" || token == "O"}
   end
 
-  def move(board, index, player)
-    board[index] = player
+  def move(index, player)
+    @board[index] = player
   end
 
-  def winner(board)
-    if winning_combo = won?(board)
-      board[winning_combo.first]
+  def winner
+    if winning_combo = won?
+      @board[winning_combo.first]
     end
   end
 end
